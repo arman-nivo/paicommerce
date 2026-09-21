@@ -1,0 +1,29 @@
+{
+  "name": "@pai/theme-registry",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Registry of installed themes. To add a theme: create /themes/<slug>, add it to package.json deps and to src/index.ts + src/manifests.ts (or run `pnpm theme:new`).",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manifests": "./src/manifests.ts"
+  },
+  "scripts": { "typecheck": "tsc --noEmit" },
+  "dependencies": {
+    "@pai/theme-sdk": "workspace:*",
+    "@pai-theme/aurora": "workspace:*",
+    "@pai-theme/volt": "workspace:*",
+    "@pai-theme/freshmart": "workspace:*",
+    "@pai-theme/bloom": "workspace:*",
+    "@pai-theme/nest": "workspace:*",
+    "@pai-theme/savor": "workspace:*",
+    "@pai-theme/lumiere": "workspace:*",
+    "@pai-theme/playhouse": "workspace:*",
+    "@pai-theme/stride": "workspace:*",
+    "@pai-theme/folio": "workspace:*",
+    "@pai-theme/bazaar": "workspace:*",
+    "@pai-theme/artisan": "workspace:*",
+    "@pai-theme/pulse": "workspace:*"
+  },
+  "devDependencies": { "typescript": "5.9.3", "@types/react": "^19.0.0" }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "@pai-theme/folio",
+  "version": "1.0.0",
+  "description": "Folio — Clean, content-rich theme for books, stationery & digital goods",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manifest": "./src/manifest.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "validate": "node ../../tools/create-theme/validate.mjs folio"
+  },
+  "dependencies": {
+    "@pai/theme-sdk": "workspace:*",
+    "@pai/theme-kit": "workspace:*"
+  },
+  "peerDependencies": { "react": "^19.0.0" },
+  "devDependencies": { "@types/react": "^19.0.0", "react": "^19.3.0", "lucide-react": "^1.47.0", "typescript": "5.9.3" }
+}

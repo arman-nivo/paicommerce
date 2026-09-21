@@ -1,0 +1,13 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "themes/*"
+  - "tools/*"
+allowBuilds:
+  esbuild: true
+  sharp: true
+  "@tailwindcss/oxide": true
+  unrs-resolver: true
+minimumReleaseAgeExclude:
+  - drizzle-kit@0.31.11
+  - drizzle-orm@0.45.3

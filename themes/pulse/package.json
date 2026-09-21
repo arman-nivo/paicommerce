@@ -1,0 +1,21 @@
+{
+  "name": "@pai-theme/pulse",
+  "version": "1.0.0",
+  "description": "Pulse — Trustworthy theme for pharmacy, health & wellness",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./manifest": "./src/manifest.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "validate": "node ../../tools/create-theme/validate.mjs pulse"
+  },
+  "dependencies": {
+    "@pai/theme-sdk": "workspace:*",
+    "@pai/theme-kit": "workspace:*"
+  },
+  "peerDependencies": { "react": "^19.0.0" },
+  "devDependencies": { "@types/react": "^19.0.0", "react": "^19.3.0", "lucide-react": "^1.47.0", "typescript": "5.9.3" }
+}

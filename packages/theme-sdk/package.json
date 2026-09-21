@@ -1,0 +1,14 @@
+{
+  "name": "@pai/theme-sdk",
+  "version": "1.0.0",
+  "description": "PaiCommerce Theme SDK — types, schema helpers, renderer and customizer protocol for building PaiCommerce themes.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./preview-protocol": "./src/preview-protocol.ts"
+  },
+  "scripts": { "typecheck": "tsc --noEmit" },
+  "peerDependencies": { "react": "^19.0.0" },
+  "devDependencies": { "@types/react": "^19.0.0", "react": "^19.3.0", "typescript": "5.9.3" }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "paicommerce",
+  "private": true,
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "db:push": "pnpm --filter @pai/db db:push",
+    "db:seed": "pnpm --filter @pai/db db:seed",
+    "db:reset": "pnpm --filter @pai/db db:reset",
+    "db:studio": "pnpm --filter @pai/db db:studio",
+    "theme:new": "node tools/create-theme/index.mjs"
+  },
+  "devDependencies": {
+    "turbo": "^2.11.2",
+    "typescript": "5.9.3",
+    "@types/node": "^24.0.0"
+  },
+  "engines": { "node": ">=20" }
+}
