@@ -1,0 +1,67 @@
+PaiCommerce is built in `/Users/hello/Documents/paicommerce`, which is now a local git repo with four commits. It has about 1,050 files and 115k lines of code. It builds, and its demo stores run on your machine with realistic data. It is not ready to launch yet: real emails, SMS and payment approval, and cloud file storage still have to be connected (details in the last section).
+
+**How I checked it:** all 23 packages typecheck, and all four apps build for production. In production mode, every demo store's home and product page loads, and checkout works. All 13 themes pass the theme validator, and all 666 images load. Pages load and a real cash-on-delivery order was placed and recorded. Saving forms in the dashboard (status changes, courier booking, plan changes) was only typechecked, not clicked through.
+
+## Run it
+```bash
+pnpm install && pnpm db:reset && pnpm dev
+```
+
+| App | URL | Login |
+|---|---|---|
+| Website, Theme Store, developer docs | localhost:3000 | |
+| Merchant panel | localhost:3001 | demo@paicommerce.com / demo1234 |
+| Admin panel | localhost:3002 | admin@paicommerce.com / admin123 |
+| Demo stores | aurora-demo.localhost:3003 and one per theme, plus `demo` | |
+
+## What's included
+- **Merchant panel:**
+  - Sign-up wizard: pick a business type and get a matching theme.
+  - Orders and couriers: invoices, one-click booking with Steadfast, Pathao or RedX, and a fraud check on each customer's past orders.
+  - Sales tools: recovery of half-filled checkouts, products with variants, and an AI description writer (English and Bangla).
+  - Store management: discounts, analytics, staff permissions, custom domains, API keys and webhooks.
+  - Theme editor: works like Shopify's, with drag-and-drop sections, a live preview, undo and publish.
+- **Admin panel:** revenue dashboards, merchant management with "log in as merchant", plans and billing, a theme review queue, developer payouts, support tickets and an audit log.
+- **Storefront:** a fast one-page checkout with COD, bKash, Nagad, SSLCommerz and Stripe. It also covers customer accounts, order tracking, Facebook Pixel, GA4 and GTM, SEO and Google/Facebook product feeds, a public developer API, and a password-protected "coming soon" mode.
+- **13 themes**, each with its own design, covering all 17 business categories:
+
+  | Theme | Business type |
+  |---|---|
+  | Aurora | Fashion |
+  | Volt | Electronics |
+  | FreshMart | Grocery |
+  | Bloom | Beauty |
+  | Nest | Home and furniture |
+  | Savor | Food |
+  | Lumière | Jewelry |
+  | Playhouse | Kids and pets |
+  | Stride | Sports |
+  | Folio | Books and digital |
+  | Bazaar | Marketplace |
+  | Artisan | Handicrafts |
+  | Pulse | Pharmacy |
+
+  Each has 2–3 style presets and a live demo store.
+- **For theme developers:** `pnpm theme:new` creates a new theme, a validator checks it, and there's a theme guide. Developers sell in the Theme Store with a 70% revenue share, reviewed and approved in the admin panel.
+- **Website:** home, features, pricing (read from the database), Theme Store, about, contact, a developer programme page, 23 pages of developer docs, and legal pages.
+
+## Stack
+Next.js 16 with React 19 and Tailwind 4, a PostgreSQL database, and a Turborepo monorepo. Each store's data is kept separate, and each app runs independently so it can scale horizontally. Deployment files (Docker, and Caddy with automatic SSL for custom domains) are in `deploy/`.
+
+## Before launch
+- **Placeholders:** emails only print to the console, plan payments are marked paid instantly, and the Nagad, aamarPay and PayPal adapters need merchant approval before they work.
+- **Storage:** uploads are saved to local disk; production needs S3 or R2.
+- **Account security:** a customer account can be claimed by phone number without an SMS code, so add SMS verification.
+- **Retries and limits:** failed webhooks are retried from memory and lost on restart, and rate limits are per server. Both need Redis or a job queue at scale.
+- **Your own content:** the website's stats, testimonials and team are illustrative and need replacing.
+- **Unviewed presets:** only each theme's default style was checked visually; the other presets passed the validator but weren't viewed.
+- **Disk space:** only about 2 GB is free on your disk.
+
+The Unsplash connector refused requests because your Unsplash email isn't confirmed. I used Unsplash photo IDs and checked every one loads instead.
+
+Market research sources:
+- [Zatiq](https://zatiq.com/)
+- [Zatiq Easy](https://zatiqeasy.com/)
+- [Future Startup on Zatiq](https://futurestartup.com/2025/10/06/zatiq-building-an-integrated-e-commerce-platform-for-small-businesses-in-emerging-markets/)
+- [Shopify's SaaS e-commerce guide](https://www.shopify.com/blog/saas-ecommerce)
+- [Best e-commerce platforms 2026](https://www.shopify.com/blog/best-ecommerce-platforms)
