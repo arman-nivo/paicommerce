@@ -28,6 +28,11 @@ export { baseSettingsSchema, BASE_SETTING_IDS, withSettingDefaults, extendSettin
 // Sections
 export * from "./sections";
 
+// Navigation. Theme packages don't depend on `next` (it isn't in their package.json, and pnpm's
+// strict node_modules means `import Link from "next/link"` would not resolve from /themes), so the
+// kit re-exports the storefront's Next.js Link. Use it for every internal link (with `context.url`).
+export { default as Link } from "next/link";
+
 // Components (server-safe)
 export {
   resolveHref,

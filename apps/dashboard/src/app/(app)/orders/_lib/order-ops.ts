@@ -2,7 +2,9 @@
  * Server-only order operations shared by single & bulk server actions.
  * Callers MUST pass orders already loaded with `eq(orders.storeId, ctx.store.id)`.
  */
+import { after } from "next/server";
 import { COURIERS, type CourierParcel } from "@pai/core/couriers";
+import { dispatchWebhook, serializeOrderForApi } from "@pai/core/webhooks";
 import { FULFILLMENT_FLOW, restockOrder } from "@pai/core/orders";
 import { and, db, eq, inArray, orderEvents, orderItems, orders, sql, storeIntegrations, type CourierInfo, type Order } from "@pai/db";
 import { addressLines } from "./filters";
@@ -19,6 +21,14 @@ export const STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
 };
 export const label = (s: string) => STATUS_LABELS[s] ?? s;
+
+/** Fire the `order.updated` webhook after the response is sent (never blocks the action). */
+export function notifyOrderUpdated(storeId: string, orderId: string) {
+  after(async () => {
+    const data = await serializeOrderForApi(orderId, { storeId });
+    if (data) await dispatchWebhook(storeId, "order.updated", data);
+  });
+}
 
 export function canTransition(from: Fs, to: Fs) {
   return FULFILLMENT_FLOW[from]?.includes(to) ?? false;
@@ -49,6 +59,7 @@ export async function applyTransition(order: Pick<Order, "id" | "storeId" | "ful
     message: `Status changed from ${label(order.fulfillmentStatus)} to ${label(to)}${to === "cancelled" || to === "returned" ? " · items restocked" : ""}${extra ? ` · ${extra}` : ""}`,
     userId,
   });
+  notifyOrderUpdated(order.storeId, order.id);
   return true;
 }
 

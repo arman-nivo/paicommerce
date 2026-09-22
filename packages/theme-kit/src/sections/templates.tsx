@@ -2,10 +2,10 @@
  * Main template sections — the "body" of product, collection, search, cart, page, blog, article,
  * account and 404 templates. Each reads its resource from the StorefrontContext.
  */
-import { Suspense } from "react";
+import { Suspense, type ComponentType } from "react";
 import Link from "next/link";
 import { ArrowLeft, Package, ShoppingBag, Truck } from "lucide-react";
-import { defineSection, type BlockInstance, type SfProduct, type StorefrontContext } from "@pai/theme-sdk";
+import { defineSection, type BlockInstance, type BlockSchema, type SectionComponent, type SectionDefinition, type SfProduct, type StorefrontContext } from "@pai/theme-sdk";
 import { aspectClass, bool, cn, formatMoney, gridColsClass, num, str } from "../lib/utils";
 import { SAMPLE_POSTS, SAMPLE_PRODUCTS } from "../lib/samples";
 import { getAccountData, getStoreUrl } from "../lib/types";
@@ -35,7 +35,8 @@ const productOf = (context: StorefrontContext): SfProduct | null => context.prod
 
 /* ─────────────────────────── main product ─────────────────────────── */
 
-function ProductBlock({ block, product, context }: { block: BlockInstance; product: SfProduct; context: StorefrontContext }) {
+/** Renders the kit's built-in main-product blocks (exported so custom renderers can fall back to it). */
+export function ProductBlock({ block, product, context }: ProductBlockProps) {
   const s = block.settings;
   switch (block.type) {
     case "vendor":
@@ -139,6 +140,66 @@ function ProductBlock({ block, product, context }: { block: BlockInstance; produ
     default:
       return null;
   }
+}
+
+/** Props passed to a main-product block renderer. */
+export type ProductBlockProps = { block: BlockInstance; product: SfProduct; context: StorefrontContext };
+
+/**
+ * A custom main-product block: its schema (shown in the customizer's "Add block" list) and a
+ * component. The component renders inside the product form, so client children may use
+ * `useProductForm()` and the other product components from `@pai/theme-kit/client`.
+ * A block whose `schema.type` matches a base block type replaces that block's schema and renderer.
+ */
+export type ProductBlockExtension = { schema: BlockSchema; component: ComponentType<ProductBlockProps> };
+
+function mainProductComponent(renderers: Map<string, ComponentType<ProductBlockProps>>): SectionComponent {
+  return ({ settings: s, blocks, context }) => {
+      const product = productOf(context);
+      if (!product) return null;
+      const ratio = aspectClass(str(s.image_ratio, "portrait"));
+      const media = str(s.media_width, "medium");
+      const cols = media === "small" ? "md:grid-cols-[5fr_6fr]" : media === "large" ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[1.15fr_1fr]";
+      const off = product.compareAtPrice && product.compareAtPrice > product.price;
+      const crumbs = [
+        { label: "Home", href: context.url("/") },
+        ...(context.collection ? [{ label: context.collection.title, href: context.collection.url }] : [{ label: "Shop", href: context.url("/collections/all") }]),
+        { label: product.title },
+      ];
+      return (
+        <Section settings={s}>
+          <ProductProvider product={product} initialVariantId={context.searchParams.variant}>
+            {bool(s.show_breadcrumbs, true) ? <Breadcrumbs items={crumbs} className="mb-5" /> : null}
+            <div className={cn("grid gap-8 lg:gap-14", cols)}>
+              <div className="min-w-0">
+                <ProductGallery
+                  layout={(str(s.gallery_layout, "thumbnails-bottom") as "thumbnails-bottom" | "thumbnails-left" | "grid" | "stacked") ?? "thumbnails-bottom"}
+                  ratio={ratio}
+                  zoom={bool(s.zoom, true)}
+                  badge={
+                    !product.available ? (
+                      <span className="absolute left-3 top-3 rounded-[min(var(--pai-radius),6px)] bg-pai-fg px-2.5 py-1 text-xs font-bold uppercase text-pai-bg">Sold out</span>
+                    ) : off ? (
+                      <span className="absolute left-3 top-3 rounded-[min(var(--pai-radius),6px)] bg-pai-sale px-2.5 py-1 text-xs font-bold uppercase text-white">Sale</span>
+                    ) : null
+                  }
+                />
+              </div>
+              <div className={cn("flex min-w-0 flex-col gap-5", bool(s.sticky_info, true) && "md:sticky md:top-24 md:self-start")}>
+                {blocks.map((b) => (
+                  (() => {
+                    const Custom = renderers.get(b.type);
+                    return Custom ? <Custom key={b.id} block={b} product={product} context={context} /> : <ProductBlock key={b.id} block={b} product={product} context={context} />;
+                  })()
+                ))}
+              </div>
+            </div>
+            {bool(s.sticky_atc, true) ? <StickyAddToCart /> : null}
+            {context.product ? <TrackProductView product={{ id: product.id, title: product.title, price: product.price }} /> : null}
+          </ProductProvider>
+        </Section>
+      );
+    };
 }
 
 export const mainProduct = defineSection({
@@ -294,50 +355,25 @@ export const mainProduct = defineSection({
       { type: "share", name: "Share buttons", limit: 1, settings: [] },
     ],
   },
-  component: ({ settings: s, blocks, context }) => {
-    const product = productOf(context);
-    if (!product) return null;
-    const ratio = aspectClass(str(s.image_ratio, "portrait"));
-    const media = str(s.media_width, "medium");
-    const cols = media === "small" ? "md:grid-cols-[5fr_6fr]" : media === "large" ? "md:grid-cols-[3fr_2fr]" : "md:grid-cols-[1.15fr_1fr]";
-    const off = product.compareAtPrice && product.compareAtPrice > product.price;
-    const crumbs = [
-      { label: "Home", href: context.url("/") },
-      ...(context.collection ? [{ label: context.collection.title, href: context.collection.url }] : [{ label: "Shop", href: context.url("/collections/all") }]),
-      { label: product.title },
-    ];
-    return (
-      <Section settings={s}>
-        <ProductProvider product={product} initialVariantId={context.searchParams.variant}>
-          {bool(s.show_breadcrumbs, true) ? <Breadcrumbs items={crumbs} className="mb-5" /> : null}
-          <div className={cn("grid gap-8 lg:gap-14", cols)}>
-            <div className="min-w-0">
-              <ProductGallery
-                layout={(str(s.gallery_layout, "thumbnails-bottom") as "thumbnails-bottom" | "thumbnails-left" | "grid" | "stacked") ?? "thumbnails-bottom"}
-                ratio={ratio}
-                zoom={bool(s.zoom, true)}
-                badge={
-                  !product.available ? (
-                    <span className="absolute left-3 top-3 rounded-[min(var(--pai-radius),6px)] bg-pai-fg px-2.5 py-1 text-xs font-bold uppercase text-pai-bg">Sold out</span>
-                  ) : off ? (
-                    <span className="absolute left-3 top-3 rounded-[min(var(--pai-radius),6px)] bg-pai-sale px-2.5 py-1 text-xs font-bold uppercase text-white">Sale</span>
-                  ) : null
-                }
-              />
-            </div>
-            <div className={cn("flex min-w-0 flex-col gap-5", bool(s.sticky_info, true) && "md:sticky md:top-24 md:self-start")}>
-              {blocks.map((b) => (
-                <ProductBlock key={b.id} block={b} product={product} context={context} />
-              ))}
-            </div>
-          </div>
-          {bool(s.sticky_atc, true) ? <StickyAddToCart /> : null}
-          {context.product ? <TrackProductView product={{ id: product.id, title: product.title, price: product.price }} /> : null}
-        </ProductProvider>
-      </Section>
-    );
-  },
+  component: mainProductComponent(new Map()),
 });
+
+/**
+ * Build a `main-product` section with extra (or replacement) block types without copying the
+ * kit's block renderer. Use with `createBaseTheme({ overrideSections: { "main-product": … } })`.
+ *
+ * @example
+ * overrideSections: { "main-product": (base) => extendMainProduct([sizeGuideBlock], base) }
+ */
+export function extendMainProduct(extensions: ProductBlockExtension[], base: SectionDefinition<any> = mainProduct): SectionDefinition<any> {
+  const renderers = new Map(extensions.map((e) => [e.schema.type, e.component] as const));
+  const baseBlocks = (base.schema.blocks ?? []).filter((b) => !renderers.has(b.type));
+  return {
+    ...base,
+    schema: { ...base.schema, blocks: [...baseBlocks, ...extensions.map((e) => e.schema)] },
+    component: mainProductComponent(renderers),
+  };
+}
 
 /* ─────────────────────────── product reviews ─────────────────────────── */
 

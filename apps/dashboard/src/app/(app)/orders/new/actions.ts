@@ -1,5 +1,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
+import { after } from "next/server";
+import { dispatchWebhook, serializeOrderForApi } from "@pai/core/webhooks";
 import { z } from "zod";
 import { isValidBdPhone, normalizePhone } from "@pai/core";
 import { CheckoutError, createOrder, priceCart } from "@pai/core/orders";
@@ -150,6 +152,11 @@ export const createManualOrder = action(
         actorUserId: ctx.user.id,
       });
       await audit(ctx, "order.create_manual", order.id, { number: order.number });
+      const storeId = ctx.store.id;
+      after(async () => {
+        const data = await serializeOrderForApi(order, { storeId });
+        if (data) await dispatchWebhook(storeId, "order.created", data);
+      });
       revalidatePath("/orders");
       return { id: order.id, number: order.number };
     } catch (e) {

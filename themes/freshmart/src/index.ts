@@ -1,5 +1,5 @@
-import { createBaseTheme } from "@pai/theme-kit";
+import { ProductCard, createBaseTheme } from "@pai/theme-kit";
 import { manifest } from "./manifest";
+import { listingOverrides } from "./sections/listings";
 
-// Placeholder: the base theme with this manifest. Replaced by the theme's own sections & styling.
-export default createBaseTheme({ manifest });
+export default createBaseTheme({ manifest, overrideSections: listingOverrides(ProductCard) });

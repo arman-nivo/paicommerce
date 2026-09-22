@@ -1,9 +1,11 @@
+/** Mirrors API_SCOPES in @pai/core/api-keys (kept client-safe here; that module imports the DB). */
 export const API_SCOPES = [
-  { value: "read_products", label: "Read products" },
-  { value: "write_products", label: "Write products" },
-  { value: "read_orders", label: "Read orders" },
-  { value: "write_orders", label: "Write orders" },
-  { value: "read_customers", label: "Read customers" },
+  { value: "products:read", label: "Read products — products, variants and collections" },
+  { value: "products:write", label: "Write products — create, update, archive, adjust inventory" },
+  { value: "orders:read", label: "Read orders — orders, line items and timelines" },
+  { value: "orders:write", label: "Write orders — create orders, update status, notes, couriers" },
+  { value: "customers:read", label: "Read customers" },
+  { value: "customers:write", label: "Write customers — create and update" },
 ] as const;
 
 export const WEBHOOK_TOPICS = [

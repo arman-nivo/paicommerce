@@ -118,3 +118,5 @@ export {
   loadSectionProducts,
   PreviewNotice,
 } from "./_shared";
+export { extendMainProduct, ProductBlock } from "./templates";
+export type { ProductBlockExtension, ProductBlockProps } from "./templates";

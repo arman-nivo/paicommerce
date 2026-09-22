@@ -14,6 +14,9 @@ import { PreviewBridge } from "@/components/preview-bridge";
 import { Tracking } from "@/components/tracking";
 import { ChatButtons } from "@/components/chat-button";
 import { StoreUnavailable } from "@/components/unavailable";
+import { PasswordGate } from "@/components/password-gate";
+import { hasStoreAccess, storePassword } from "@/lib/password";
+import { cookies } from "next/headers";
 
 type Props = { children: ReactNode; params: Promise<{ site: string }> };
 
@@ -41,6 +44,10 @@ export default async function StoreLayout({ children, params }: Props) {
   const site = await resolveSite((await params).site);
   if (!site) notFound();
   if (isUnavailable(site.store) && !site.preview) return <StoreUnavailable name={site.store.name} logoUrl={site.store.logoUrl} />;
+  if (!site.preview && !(await hasStoreAccess(site.store))) {
+    const wrong = (await cookies()).get("pai_pw_err")?.value === "1";
+    return <PasswordGate siteKey={site.key} base={site.base} name={site.store.name} logoUrl={site.store.logoUrl} message={storePassword(site.store)?.message} wrong={wrong} />;
+  }
 
   const [t, cartRow, customer, tracking] = await Promise.all([getSiteTheme(site.key), getCart(site), customerFor(site), trackingConfig(site.store)]);
   const cart = await toCartView(site, cartRow);

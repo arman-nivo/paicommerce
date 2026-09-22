@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, User, X } from "lucide-react";
@@ -175,16 +175,83 @@ export function AccountLink({ className, showName = false }: { className?: strin
 }
 
 /** Desktop dropdown for a menu item with children (hover + keyboard accessible). */
-export function MenuDropdown({ item, className }: { item: SfMenuItem; className?: string }) {
+/**
+ * Dropdown for a menu item with children. Opens on hover (with a short close delay so the pointer
+ * can travel to the panel), on click and via keyboard; closes on Escape (focus returns to the
+ * trigger), when focus leaves the item, on outside click and when a link is chosen.
+ */
+export function MenuDropdown({ item, className, closeDelay = 180 }: { item: SfMenuItem; className?: string; closeDelay?: number }) {
   const [open, setOpen] = useState(false);
+  const root = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const panelId = useId();
+
+  const cancelClose = () => {
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = null;
+  };
+  const openNow = () => {
+    cancelClose();
+    setOpen(true);
+  };
+  const closeSoon = () => {
+    cancelClose();
+    timer.current = setTimeout(() => setOpen(false), closeDelay);
+  };
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        trigger.current?.focus();
+      }
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (root.current && !root.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKey);
+    document.addEventListener("pointerdown", onPointer);
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.removeEventListener("pointerdown", onPointer);
+    };
+  }, [open]);
+
+  useEffect(() => cancelClose, []);
+
   return (
-    <div className={cn("relative", className)} onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
-      <button type="button" className="inline-flex items-center gap-1 py-2" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
+    <div
+      ref={root}
+      className={cn("relative", className)}
+      onMouseEnter={openNow}
+      onMouseLeave={closeSoon}
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setOpen(false);
+      }}
+    >
+      <button
+        ref={trigger}
+        type="button"
+        className="inline-flex items-center gap-1 py-2"
+        aria-expanded={open}
+        aria-controls={panelId}
+        aria-haspopup="true"
+        onClick={() => (open ? setOpen(false) : openNow())}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") {
+            e.preventDefault();
+            openNow();
+            requestAnimationFrame(() => root.current?.querySelector<HTMLAnchorElement>(`#${CSS.escape(panelId)} a`)?.focus());
+          }
+        }}
+      >
         {item.label}
-        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} />
+        <ChevronDown className={cn("size-3.5 transition-transform", open && "rotate-180")} aria-hidden />
       </button>
       {open ? (
-        <div className="animate-pai-pop absolute left-1/2 top-full z-50 min-w-56 -translate-x-1/2 pt-2">
+        <div id={panelId} className="animate-pai-pop absolute left-1/2 top-full z-50 min-w-56 -translate-x-1/2 pt-2">
           <ul className="rounded-pai border border-pai-border bg-pai-bg p-2 text-pai-fg shadow-xl">
             <li>
               <Link href={item.url} className="block rounded-[min(var(--pai-radius),8px)] px-3 py-2 text-sm font-semibold hover:bg-pai-muted" onClick={() => setOpen(false)}>

@@ -34,3 +34,7 @@ export { Accordion, Tabs, Carousel, Slideshow, Countdown, NewsletterForm, Wishli
 export type { AccordionItem, CarouselProps } from "./widgets";
 export { QuickView, QuickAddButton } from "./quick-view";
 export { SortSelect, CollectionFilters, FilterDrawerButton, ContactForm, LoginForm, RegisterForm, SORT_OPTIONS } from "./forms";
+
+// Next.js navigation for theme client components (themes can't import `next/*` directly — see README).
+export { default as Link } from "next/link";
+export { usePathname, useRouter, useSearchParams } from "next/navigation";

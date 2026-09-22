@@ -7,7 +7,7 @@ import { action } from "@/lib/action";
 import { audit } from "@/lib/audit";
 import { ActionError } from "@/lib/errors";
 import { optText, uuid, uuids } from "@/lib/zod";
-import { applyTransition, bookWithCourier, canTransition, COURIER_NAMES, dueAmount, enabledCouriers, label, shipAfterBooking } from "./_lib/order-ops";
+import { applyTransition, bookWithCourier, notifyOrderUpdated, canTransition, COURIER_NAMES, dueAmount, enabledCouriers, label, shipAfterBooking } from "./_lib/order-ops";
 
 const fulfillment = z.enum(["unfulfilled", "confirmed", "processing", "shipped", "delivered", "returned", "cancelled"]);
 const paymentStatus = z.enum(["pending", "authorized", "paid", "partially_refunded", "refunded", "failed"]);
@@ -86,6 +86,7 @@ export const updatePayment = action(
     if (refChanged) parts.push(reference ? `Reference ${reference}` : "Reference removed");
     await db.insert(orderEvents).values({ orderId: id, type: "payment", message: parts.join(" · "), userId: ctx.user.id });
     await audit(ctx, "order.payment", id, { from: o.paymentStatus, to: status });
+    notifyOrderUpdated(ctx.store.id, id);
     revalidateOrder(id);
     return { status };
   },

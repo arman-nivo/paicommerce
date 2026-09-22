@@ -7,7 +7,7 @@ import { and, db, eq, orderEvents, orders, storeIntegrations } from "@pai/db";
 import { PAYMENT_PROVIDERS } from "@pai/core/payments";
 import { dispatchWebhook, serializeOrderForApi } from "@pai/core/webhooks";
 import { storeOrder } from "@/lib/checkout";
-import { resolveSite, siteUrl } from "@/lib/site";
+import { requestOrigin, resolveSite, siteUrl } from "@/lib/site";
 
 type Ctx = { params: Promise<{ site: string; provider: string; action: string }> };
 
@@ -29,7 +29,8 @@ async function handle(req: Request, { params }: Ctx) {
   }
   const orderId = p.order || p.tran_id || p.client_reference_id || "";
   const order = /^[0-9a-f-]{36}$/i.test(orderId) ? await storeOrder(site, orderId) : null;
-  const redirectTo = (q: string) => NextResponse.redirect(new URL(siteUrl(site, order ? `/checkout/thank-you/${order.id}?payment=${q}` : "/"), req.url), 303);
+  const origin = await requestOrigin();
+  const redirectTo = (q: string) => NextResponse.redirect(`${origin}${siteUrl(site, order ? `/checkout/thank-you/${order.id}?payment=${q}` : "/")}`, 303);
   if (!order || order.paymentMethod !== providerId) return redirectTo("failed");
   if (order.paymentStatus === "paid") return action === "callback" && req.method === "POST" ? NextResponse.json({ ok: true }) : redirectTo("paid");
   if (action === "cancel") return redirectTo("cancelled");

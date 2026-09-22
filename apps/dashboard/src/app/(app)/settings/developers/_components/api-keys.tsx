@@ -102,7 +102,7 @@ export function ApiKeys({ keys, locked }: { keys: KeyView[]; locked: boolean }) 
 
 function CreateKeyDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [name, setName] = React.useState("");
-  const [scopes, setScopes] = React.useState<string[]>(["read_products", "read_orders"]);
+  const [scopes, setScopes] = React.useState<string[]>(["products:read", "orders:read"]);
   const [saving, setSaving] = React.useState(false);
   const [key, setKey] = React.useState<string | null>(null);
 
@@ -111,7 +111,7 @@ function CreateKeyDialog({ open, onClose }: { open: boolean; onClose: () => void
     setTimeout(() => {
       setKey(null);
       setName("");
-      setScopes(["read_products", "read_orders"]);
+      setScopes(["products:read", "orders:read"]);
     }, 200);
   };
 
