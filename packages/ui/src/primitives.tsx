@@ -56,15 +56,15 @@ export function Spinner({ className }: { className?: string }) {
 const field =
   "w-full rounded-lg border border-input bg-card px-3 text-sm text-foreground shadow-xs transition placeholder:text-muted-foreground/70 focus:border-ring focus:outline-none focus:ring-3 focus:ring-ring/15 disabled:cursor-not-allowed disabled:opacity-60";
 
-export function Input({ className, ...props }: React.InputHTMLAttributes<HTMLInputElement>) {
+export function Input({ className, ...props }: React.ComponentProps<"input">) {
   return <input className={cn(field, "h-9", className)} {...props} />;
 }
 
-export function Textarea({ className, ...props }: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
   return <textarea className={cn(field, "min-h-[88px] py-2", className)} {...props} />;
 }
 
-export function Select({ className, children, ...props }: React.SelectHTMLAttributes<HTMLSelectElement>) {
+export function Select({ className, children, ...props }: React.ComponentProps<"select">) {
   return (
     <select
       className={cn(

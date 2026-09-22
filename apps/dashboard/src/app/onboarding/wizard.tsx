@@ -72,11 +72,21 @@ export function Wizard({ userName, hasStores, domain, categories, themes }: { us
   const [name, setName] = React.useState("");
   const [slug, setSlug] = React.useState("");
   const [slugTouched, setSlugTouched] = React.useState(false);
-  const [slugState, setSlugState] = React.useState<{ checking: boolean; available?: boolean; reason?: string; suggestion?: string }>({ checking: false });
+  const [slugState, setSlugState] = React.useState<{ checking: boolean; available?: boolean; reason?: string; suggestion?: string; failed?: boolean }>({ checking: false });
+  const [slugRetry, setSlugRetry] = React.useState(0);
+  const nameRef = React.useRef<HTMLInputElement>(null);
   const [category, setCategory] = React.useState("");
   const [theme, setTheme] = React.useState("");
   const [creating, setCreating] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  // If the merchant typed before the page finished hydrating (slow first load in dev / on mobile),
+  // the text is in the DOM but not in React state — adopt it so Continue works.
+  React.useEffect(() => {
+    const v = nameRef.current?.value;
+    if (v && !name) setName(v);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Auto-derive slug from name until the merchant edits it.
   React.useEffect(() => {
@@ -94,12 +104,14 @@ export function Wizard({ userName, hasStores, domain, categories, themes }: { us
       try {
         const r = await checkSlug(slug);
         setSlugState({ checking: false, available: r.available, reason: r.reason, suggestion: r.suggestion });
-      } catch {
-        setSlugState({ checking: false });
+      } catch (e) {
+        console.error("[onboarding] availability check failed", e);
+        // Don't block the merchant: the server re-validates the address when the store is created.
+        setSlugState({ checking: false, failed: true });
       }
     }, 350);
     return () => clearTimeout(t);
-  }, [slug]);
+  }, [slug, slugRetry]);
 
   const sortedThemes = React.useMemo(() => {
     const rec = (t: ThemeOpt) => (category && t.categories.includes(category) ? 0 : 1);
@@ -113,7 +125,8 @@ export function Wizard({ userName, hasStores, domain, categories, themes }: { us
     }
   }, [step, theme, sortedThemes]);
 
-  const canNext = [name.trim().length >= 2, !!slug && slugState.available === true && !slugState.checking, !!category, !!theme][step];
+  const slugOk = !slugState.checking && (slugState.available === true || (!!slugState.failed && slug.length >= 3));
+  const canNext = [name.trim().length >= 2, !!slug && slugOk, !!category, !!theme][step];
 
   const next = async () => {
     setError(null);
@@ -176,6 +189,7 @@ export function Wizard({ userName, hasStores, domain, categories, themes }: { us
             <h1 className="mt-2 font-display text-3xl font-bold tracking-tight">{hasStores ? "Let's create another store" : `Welcome, ${userName}! Let's name your store`}</h1>
             <p className="mt-2 text-muted-foreground">You can change this any time. Pick something short and memorable.</p>
             <Input
+              ref={nameRef}
               autoFocus
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -222,6 +236,13 @@ export function Wizard({ userName, hasStores, domain, categories, themes }: { us
               ) : slugState.available ? (
                 <span className="flex items-center gap-1.5 font-medium text-emerald-600">
                   <CircleCheck className="size-4" /> {slug}.{domain} is available!
+                </span>
+              ) : slugState.failed ? (
+                <span className="flex flex-wrap items-center gap-1.5 text-amber-700">
+                  <CircleAlert className="size-4" /> We couldn&apos;t check this address right now — you can still continue.
+                  <button className="font-semibold text-primary underline underline-offset-2" onClick={() => setSlugRetry((n) => n + 1)}>
+                    Check again
+                  </button>
                 </span>
               ) : slugState.available === false ? (
                 <span className="flex flex-wrap items-center gap-1.5 text-red-600">
