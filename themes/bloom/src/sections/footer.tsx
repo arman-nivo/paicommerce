@@ -96,7 +96,7 @@ export const bloomFooter = defineSection({
       <footer className={cn("bloom-footer relative isolate overflow-hidden pt-16 text-[0.92rem]", schemeClass(s.color_scheme))}>
         <Container>
           {club ? (
-            <div className="relative mb-16 grid overflow-hidden rounded-[calc(var(--pai-radius)*1.6)] bg-pai-bg shadow-[0_30px_60px_-40px_rgb(var(--pai-fg-rgb)/0.45)] md:grid-cols-[1.2fr_1fr]">
+            <div className="relative mb-16 grid overflow-hidden rounded-[calc(var(--pai-radius)*1.6)] bg-pai-card shadow-[0_30px_60px_-40px_rgb(var(--pai-fg-rgb)/0.45)] md:grid-cols-[1.2fr_1fr]">
               <div className="p-8 md:p-12">
                 {str(club.settings.eyebrow) ? <p className="pai-eyebrow mb-3 text-pai-accent">{str(club.settings.eyebrow)}</p> : null}
                 <h2 className="pai-h2">
@@ -203,7 +203,11 @@ export const bloomFooter = defineSection({
           </div>
         </Container>
         {bool(s.show_wordmark, true) ? (
-          <p aria-hidden className="bloom-wordmark pointer-events-none select-none whitespace-nowrap text-center font-heading italic leading-[0.8] text-pai-accent/20">
+          <p
+            aria-hidden
+            className="bloom-wordmark pointer-events-none select-none overflow-hidden whitespace-nowrap text-center font-heading italic leading-[0.8] text-pai-accent/20"
+            style={{ fontSize: `min(15rem, ${Math.max(6, Math.round(150 / Math.max(4, store.name.length)))}vw)` }}
+          >
             {store.name}
           </p>
         ) : null}

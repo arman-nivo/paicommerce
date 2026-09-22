@@ -43,7 +43,7 @@ export default createBaseTheme({ manifest, /* options */ });
 | `settingsDefaults` | `SettingValues` | New defaults for global settings such as colours, fonts and card style. Applied on top of the category palette. |
 | `defaultConfig` | `Partial<ThemeConfig> \| (base) => ThemeConfig` | Which sections appear on each template. A partial object is merged into the kit default. |
 | `presets` | `ThemePreset[] \| (base) => ThemePreset[]` | One preset per category you support. `preset.id` **must equal** the category id; new stores pick a preset by their category. |
-| `css` | `string` | Theme CSS, nested under `.pai-theme-<slug>`. Use `&` selectors (`& .pai-btn { … }`) and keep it small. |
+| `css` | `string` | Theme CSS, nested under `.pai-theme-<slug>`. Use `&` selectors (`& .pai-btn { … }`) and keep it small. `@keyframes`, `@font-face`, `@property` and `@import` are hoisted to the top level automatically, so declare them normally. |
 | `Layout` | `ComponentType<ThemeLayoutProps>` | Page wrapper (`header`, `footer`, `children`, `context`). |
 | `cssVariables` | `(settings) => Record<string,string>` | Defaults to `kitCssVariables`. Wrap it if you add variables: `(s) => ({ ...kitCssVariables(s), "--x": … })`. |
 | `fontSettings` | `string[]` | Ids of `font` settings to load from Google Fonts. Default `["font_heading","font_body"]`. |

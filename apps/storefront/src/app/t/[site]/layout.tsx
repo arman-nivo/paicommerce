@@ -14,6 +14,7 @@ import { PreviewBridge } from "@/components/preview-bridge";
 import { Tracking } from "@/components/tracking";
 import { ChatButtons } from "@/components/chat-button";
 import { StoreUnavailable } from "@/components/unavailable";
+import { scopeThemeCss } from "@/lib/theme-css";
 import { PasswordGate } from "@/components/password-gate";
 import { hasStoreAccess, storePassword } from "@/lib/password";
 import { cookies } from "next/headers";
@@ -75,7 +76,7 @@ export default async function StoreLayout({ children, params }: Props) {
       {t.fontsUrl ? <link rel="stylesheet" href={t.fontsUrl} precedence="default" /> : null}
       <style
         // Theme CSS is scoped under the theme class; body gets the theme background for overscroll.
-        dangerouslySetInnerHTML={{ __html: `body{background:${t.cssVars["--pai-bg"] ?? "#fff"}}${t.theme.css ? `.pai-theme-${slug}{${t.theme.css}}` : ""}` }}
+        dangerouslySetInnerHTML={{ __html: `body{background:${t.cssVars["--pai-bg"] ?? "#fff"}}${scopeThemeCss(slug, t.theme.css)}` }}
       />
       <StorefrontShell config={config} initialCart={cart}>
         {children}

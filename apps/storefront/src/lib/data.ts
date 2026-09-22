@@ -141,8 +141,12 @@ function toSfPost(p: typeof blogPosts.$inferSelect, ctx: Ctx): SfPost {
 
 /* ─────────────────────────── product queries ─────────────────────────── */
 
+// Correlated subquery: the outer column must be table-qualified, because drizzle renders
+// `collections.id` as a bare "id", which would bind to `p.id` inside the subquery.
 const activeCount = (collectionId: SQL | typeof collections.id) =>
-  sql<number>`(select count(*)::int from ${productCollections} pc join ${products} p on p.id = pc.product_id where pc.collection_id = ${collectionId} and p.status = 'active')`;
+  sql<number>`(select count(*)::int from ${productCollections} pc join ${products} p on p.id = pc.product_id where pc.collection_id = ${
+    collectionId === collections.id ? sql.raw(`"collections"."id"`) : collectionId
+  } and p.status = 'active')`;
 
 export async function queryProducts(ctx: Ctx, q: ProductQuery = {}): Promise<Paginated<SfProduct>> {
   const pageSize = Math.max(1, Math.min(100, q.limit ?? 24));

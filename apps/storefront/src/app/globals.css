@@ -3,7 +3,7 @@
 
 /* Classes used by the kit, every theme and the storefront itself. */
 @source "../../../../packages/theme-kit/src";
-@source "../../../../themes/*/src";
+@source "../../../../themes";
 @source "../";
 
 html {

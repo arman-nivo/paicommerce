@@ -43,7 +43,7 @@ function CategoriesPanel({ collections, promo, context }: { collections: SfColle
                 </span>
                 <span className="min-w-0">
                   <span className="block truncate text-sm font-semibold group-hover:text-pai-primary">{c.title}</span>
-                  <span className="block text-xs opacity-60">{c.productsCount} products</span>
+                  {c.productsCount > 0 ? <span className="block text-xs opacity-60">{c.productsCount} products</span> : null}
                 </span>
               </SmartLink>
             </li>
@@ -150,7 +150,7 @@ export const voltHeader = defineSection({
     return (
       <HeaderShell sticky={bool(s.sticky, true)} className="volt-header">
         {bool(s.show_utility, true) ? (
-          <div className="hidden border-b border-pai-border bg-black/30 text-xs md:block">
+          <div className="hidden border-b border-pai-border bg-pai-fg/[0.04] text-xs md:block">
             <Container className="flex h-9 items-center justify-between gap-6">
               <p className="flex items-center gap-2 opacity-75">
                 <ShieldCheck className="size-3.5 text-pai-primary" aria-hidden />

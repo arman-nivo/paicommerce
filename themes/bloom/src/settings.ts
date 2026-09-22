@@ -23,6 +23,7 @@ const shared: SettingValues = {
   card_show_wishlist: true,
   cart_type: "drawer",
   cart_show_free_shipping: true,
+  color_card: "#ffffff",
   bloom_card_shadow: "soft",
   bloom_italic_accent: true,
   bloom_blobs: true,
@@ -89,6 +90,7 @@ export const bloomSettingsGroups: SettingsGroup[] = [
   {
     name: "Bloom style",
     settings: [
+      { type: "color", id: "color_card", label: "Card background", default: "#ffffff", info: "Product cards, review cards and panels." },
       {
         type: "select",
         id: "bloom_card_shadow",
@@ -110,16 +112,18 @@ export function bloomSettingsSchema(base: SettingsGroup[]): SettingsGroup[] {
   return extendSettingsSchema(base, bloomSettingsGroups);
 }
 
-const SHADOWS: Record<string, string> = {
-  soft: "0 18px 40px -22px rgb(var(--pai-fg-rgb) / 0.28)",
-  float: "0 22px 48px -24px rgb(var(--pai-fg-rgb) / 0.32)",
-  none: "none",
+const SHADOWS: Record<string, [string, string]> = {
+  soft: ["0 1px 2px rgb(var(--pai-fg-rgb) / 0.04), 0 16px 36px -20px rgb(var(--pai-fg-rgb) / 0.22)", "0 1px 2px rgb(var(--pai-fg-rgb) / 0.05), 0 22px 44px -22px rgb(var(--pai-fg-rgb) / 0.3)"],
+  float: ["0 1px 2px rgb(var(--pai-fg-rgb) / 0.04), 0 18px 40px -22px rgb(var(--pai-fg-rgb) / 0.26)", "0 2px 4px rgb(var(--pai-fg-rgb) / 0.05), 0 34px 60px -28px rgb(var(--pai-fg-rgb) / 0.42)"],
+  none: ["none", "none"],
 };
 
 export function bloomCssVariables(s: SettingValues): Record<string, string> {
   const vars = kitCssVariables(s);
   const shadow = typeof s.bloom_card_shadow === "string" ? s.bloom_card_shadow : "soft";
-  vars["--bloom-card-shadow"] = SHADOWS[shadow] ?? SHADOWS.soft!;
+  const [rest, hover] = SHADOWS[shadow] ?? SHADOWS.soft!;
+  vars["--bloom-card-shadow"] = rest;
+  vars["--bloom-card-shadow-hover"] = hover;
   vars["--bloom-card-lift"] = shadow === "float" ? "-6px" : "0px";
   vars["--bloom-em-style"] = s.bloom_italic_accent === false ? "normal" : "italic";
   vars["--bloom-em-color"] = s.bloom_italic_accent === false ? "inherit" : "var(--pai-accent)";

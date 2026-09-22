@@ -49,7 +49,7 @@ export const ICON_OPTIONS = [
   { value: "zap", label: "Lightning" },
   { value: "award", label: "Award" },
   { value: "thumbs-up", label: "Thumbs up" },
-  { value: "smile", label: "Smile" },
+  { value: "heart-handshake", label: "Care" },
   { value: "map-pin", label: "Location" },
   { value: "phone", label: "Phone" },
   { value: "mail", label: "Mail" },

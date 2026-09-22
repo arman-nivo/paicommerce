@@ -15,6 +15,7 @@ export const voltFooter = defineSection({
     settings: [
       { type: "header", label: "Newsletter band" },
       { type: "checkbox", id: "show_newsletter", label: "Show newsletter band", default: true },
+      { type: "text", id: "newsletter_eyebrow", label: "Eyebrow", default: "Insider list" },
       { type: "text", id: "newsletter_heading", label: "Heading", default: "Get drops before they sell out" },
       { type: "textarea", id: "newsletter_text", label: "Text", default: "Launch alerts, restocks and members-only flash deals. No spam — unsubscribe anytime." },
       { type: "header", label: "Bottom bar" },
@@ -72,13 +73,13 @@ export const voltFooter = defineSection({
       .filter(Boolean);
 
     return (
-      <footer className="volt-footer relative mt-10 overflow-hidden border-t border-pai-border bg-[color-mix(in_srgb,var(--pai-bg)_70%,black)] text-[0.9rem]">
+      <footer className="volt-footer relative mt-10 overflow-hidden border-t border-pai-border bg-pai-muted/40 text-[0.9rem]">
         <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 h-80 w-[60rem] -translate-x-1/2 rounded-full bg-pai-primary/10 blur-3xl" />
         {bool(s.show_newsletter, true) ? (
           <Container className="relative pt-14">
             <div className="grid items-center gap-6 rounded-[calc(var(--pai-radius)*1.5)] border border-pai-border bg-pai-muted/70 p-6 md:grid-cols-[1.2fr_1fr] md:p-10">
               <div>
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-pai-primary">Volt insider</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-pai-primary">{str(s.newsletter_eyebrow, "Insider list")}</p>
                 <h2 className="pai-h3 mt-2">{str(s.newsletter_heading)}</h2>
                 {str(s.newsletter_text) ? <p className="mt-2 max-w-md opacity-70">{str(s.newsletter_text)}</p> : null}
               </div>
