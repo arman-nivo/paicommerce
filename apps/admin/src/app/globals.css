@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "@pai/ui/styles.css";
+@source "../../../../packages/ui/src";
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { font-feature-settings: "cv11", "ss01"; }
+}
+
+@utility tabular { font-variant-numeric: tabular-nums; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; }
+}

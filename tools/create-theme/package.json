@@ -1,0 +1,19 @@
+{
+  "name": "@pai/create-theme",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Scaffold, register and validate PaiCommerce themes (`pnpm theme:new`).",
+  "bin": {
+    "create-pai-theme": "./index.mjs",
+    "validate-pai-theme": "./validate.mjs"
+  },
+  "files": ["index.mjs", "validate.mjs", "template"],
+  "scripts": {
+    "new": "node ./index.mjs",
+    "validate": "node ./validate.mjs",
+    "validate:all": "node ./validate.mjs --all",
+    "typecheck": "node --check ./index.mjs && node --check ./validate.mjs"
+  },
+  "engines": { "node": ">=20" }
+}

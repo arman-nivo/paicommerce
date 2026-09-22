@@ -10,6 +10,8 @@ const config: NextConfig = {
   images: { remotePatterns: remoteImages },
   outputFileTracingRoot: root,
   typedRoutes: false,
+  // Keep disk usage low in local dev (several apps build side by side).
+  experimental: { turbopackFileSystemCacheForDev: false },
 };
 
 export default config;

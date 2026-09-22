@@ -10,7 +10,12 @@
     "./orders": "./src/orders.ts",
     "./storage": "./src/storage.ts",
     "./integrations": "./src/integrations.ts",
-    "./ai": "./src/ai.ts"
+    "./ai": "./src/ai.ts",
+    "./couriers": "./src/couriers/index.ts",
+    "./payments": "./src/payments/index.ts",
+    "./reset": "./src/reset.ts",
+    "./api-keys": "./src/api-keys.ts",
+    "./webhooks": "./src/webhooks.ts"
   },
   "scripts": { "typecheck": "tsc --noEmit" },
   "dependencies": {

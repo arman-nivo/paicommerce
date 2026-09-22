@@ -1,0 +1,61 @@
+import type { Catalog } from "./types";
+
+const PORTION = { name: "Portion", values: ["Half", "Full"] };
+
+export const food: Catalog = {
+  key: "food",
+  vendor: "Savor Kitchen",
+  freeShippingOver: null,
+  qty: [[1, 55], [2, 35], [3, 10]],
+  collections: [
+    { slug: "biryani-rice", title: "Biryani & Rice", description: "Slow-cooked kacchi, tehari and polao — the Old Dhaka way.", img: "biryaniPot" },
+    { slug: "curries-grills", title: "Curries & Grills", description: "Rich bhuna, tikka and kebabs straight from the charcoal grill.", img: "grillPlatter" },
+    { slug: "burgers-pizza", title: "Burgers & Pizza", description: "Smash burgers, crispy chicken and wood-fired pizza.", img: "doubleBurger" },
+    { slug: "desserts-bakery", title: "Desserts & Bakery", description: "Cakes, cupcakes and sweet treats baked fresh daily.", img: "chocolateCake" },
+    { slug: "beverages", title: "Beverages", description: "Cold coffees, fresh juices and masala chai.", img: "icedCoffee" },
+    { slug: "combos", title: "Family Combos", description: "Great-value platters for sharing with family and friends.", img: "foodSpread" },
+  ],
+  products: [
+    { t: "Mutton Kacchi Biryani", price: 380, img: ["biryaniPot", "biryaniFeast"], type: "Biryani", col: ["biryani-rice"], feat: true, pop: 4,
+      d: "Aromatic chinigura rice layered with tender mutton, potato and a boiled egg, slow-cooked in a sealed deg.", h: ["Served with borhani & salad", "Cooked fresh every 2 hours"], opt: [{ name: "Portion", values: ["Half", "Full", "Family (4 pax)"] }], abs: { Half: 380, Full: 650, "Family (4 pax)": 2350 }, stock: [30, 80], tags: ["kacchi", "bestseller"] },
+    { t: "Chicken Biryani", price: 260, img: ["chickenBiryani", "biryaniPlate"], type: "Biryani", col: ["biryani-rice"], feat: true, pop: 3, d: "Fragrant basmati biryani with a juicy chicken leg piece.", opt: [PORTION], abs: { Half: 260, Full: 420 }, stock: [30, 80], tags: ["biryani"] },
+    { t: "Butter Chicken with Naan", price: 480, img: ["butterChicken", "curryNaan"], type: "Curry", col: ["curries-grills"], feat: true, pop: 2, d: "Creamy tomato-butter gravy with smoky tandoori chicken and two butter naans.", stock: [20, 60], tags: ["curry"] },
+    { t: "Beef Kala Bhuna", price: 420, img: ["curryPan", "curryCopper"], type: "Curry", col: ["curries-grills"], pop: 2, d: "Chattogram-style dark, dry beef bhuna cooked for 4 hours with mustard oil and spices.", stock: [20, 60], tags: ["beef", "chattogram"] },
+    { t: "Chicken Tikka (6 pcs)", price: 380, img: ["tikka"], type: "Grill", col: ["curries-grills"], pop: 1.5, d: "Yoghurt-marinated chicken chunks grilled over charcoal, with mint chutney.", stock: [20, 60], tags: ["grill"] },
+    { t: "Mixed Grill Platter", price: 1250, img: ["grillPlatter", "grilledPlatter"], type: "Grill", col: ["curries-grills", "combos"], feat: true, pop: 1, d: "Tikka, seekh kebab, grilled chicken and naan — serves 3.", stock: [10, 30], tags: ["grill", "sharing"] },
+    { t: "Chicken Shawarma Plate", price: 280, img: ["shawarma"], type: "Wrap", col: ["curries-grills"], pop: 2, d: "Garlic-marinated chicken with fries, pickles and toum sauce.", stock: [20, 60], tags: ["shawarma"] },
+    { t: "Smash Double Beef Burger", price: 450, img: ["doubleBurger", "burgerDark"], type: "Burger", col: ["burgers-pizza"], feat: true, pop: 2.5, d: "Two smashed beef patties, cheddar, caramelised onions and house sauce on a brioche bun.", stock: [20, 60], tags: ["burger"] },
+    { t: "Classic Cheeseburger & Fries", price: 390, img: ["burgerFries", "cheeseburger"], type: "Burger", col: ["burgers-pizza"], pop: 2, d: "Our original beef cheeseburger with crispy fries.", stock: [20, 60], tags: ["burger"] },
+    { t: "Crispy Fried Chicken (4 pcs)", price: 520, img: ["friedChicken", "chickenStrips"], type: "Fried Chicken", col: ["burgers-pizza"], pop: 2, d: "Buttermilk-brined, double-coated and fried till golden.", stock: [20, 60], tags: ["chicken"] },
+    { t: "Wood-Fired Margherita Pizza", price: 750, img: ["margherita", "pizza"], type: "Pizza", col: ["burgers-pizza"], pop: 1.5, d: "San Marzano tomato, fresh mozzarella and basil.", opt: [{ name: "Size", values: ["10 inch", "12 inch"] }], abs: { "10 inch": 750, "12 inch": 950 }, stock: [20, 60], tags: ["pizza"] },
+    { t: "Pepperoni Pizza", price: 850, img: ["pepperoni", "pizzaSlice"], type: "Pizza", col: ["burgers-pizza"], pop: 1.5, d: "Loaded with beef pepperoni and a three-cheese blend.", opt: [{ name: "Size", values: ["10 inch", "12 inch"] }], abs: { "10 inch": 850, "12 inch": 1050 }, stock: [20, 60], tags: ["pizza"] },
+    { t: "Chicken Momo (8 pcs)", price: 280, img: ["momo", "dumplings"], type: "Momo", col: ["curries-grills"], pop: 1.5, d: "Steamed dumplings with spicy tomato achar.", stock: [20, 60], tags: ["momo"] },
+    { t: "Belgian Chocolate Cake", price: 850, img: ["chocolateCake", "brownie"], type: "Cake", col: ["desserts-bakery"], feat: true, pop: 1.5, d: "Moist chocolate sponge with Belgian ganache. Order 4 hours in advance.", opt: [{ name: "Size", values: ["1 lb", "2 lb"] }], abs: { "1 lb": 850, "2 lb": 1600 }, stock: [5, 20], tags: ["cake", "birthday"] },
+    { t: "Strawberry Cupcakes (Box of 6)", price: 720, img: ["cupcakes"], type: "Cupcake", col: ["desserts-bakery"], pop: 1, d: "Vanilla cupcakes with strawberry buttercream.", stock: [5, 20], tags: ["dessert"] },
+    { t: "Glazed Donut Box (6 pcs)", price: 650, img: ["donuts"], type: "Donut", col: ["desserts-bakery"], pop: 1.2, d: "Assorted glazed and sprinkle donuts.", stock: [5, 20], tags: ["dessert"] },
+    { t: "Iced Caramel Latte", price: 280, img: ["icedCoffee", "latte"], type: "Coffee", col: ["beverages"], pop: 2, d: "Double espresso, milk and caramel over ice.", stock: [30, 80], tags: ["coffee"] },
+    { t: "Fresh Orange Juice", price: 220, img: ["orangeJuice"], type: "Juice", col: ["beverages"], pop: 1.5, d: "Freshly squeezed malta juice, no added sugar.", stock: [30, 80], tags: ["juice"] },
+    { t: "Masala Chai", price: 120, img: ["tea"], type: "Tea", col: ["beverages"], pop: 1.5, d: "Strong milk tea brewed with cardamom, ginger and cinnamon.", stock: [30, 80], tags: ["tea"] },
+    { t: "Family Feast Combo (4 pax)", price: 2450, cmp: 2850, img: ["foodSpread", "biryaniFeast"], type: "Combo", col: ["combos"], feat: true, pop: 1.2, d: "Kacchi (family), 4 chicken tikka, borhani and firni.", stock: [10, 30], tags: ["combo", "sharing"] },
+    { t: "Beef Seekh Kebab (4 pcs)", price: 360, img: ["kebabs"], type: "Grill", col: ["curries-grills"], ext: true, pop: 1, d: "Minced beef kebabs with onion salad.", stock: [20, 60], tags: ["grill"] },
+    { t: "Classic Tiramisu", price: 380, img: ["tiramisu"], type: "Dessert", col: ["desserts-bakery"], ext: true, pop: 0.8, d: "Espresso-soaked ladyfingers with mascarpone cream.", stock: [5, 20], tags: ["dessert"] },
+  ],
+  blog: [
+    { title: "The Secret Behind Old Dhaka Kacchi", excerpt: "Why the sealed deg, the right mutton and patience make all the difference.", cover: "biryaniPot", tags: ["story", "kacchi"],
+      points: [["The meat", "Young mutton marinated overnight in yoghurt and spices."], ["The rice", "Aged chinigura or kalijira for aroma."], ["The dum", "The pot is sealed with dough and cooked slowly over coals."]] },
+    { title: "Planning a Party Menu for 20 Guests", excerpt: "How much biryani, how many kebabs and what to serve for dessert.", cover: "foodSpread", tags: ["party", "tips"],
+      points: [["Rice", "Plan one full biryani for every two adults."], ["Starters", "Three to four kebab pieces per guest."], ["Dessert", "Cakes and firni travel well — order a day ahead."]] },
+    { title: "Our Weekend Brunch Menu Is Here", excerpt: "Cold coffees, fresh juices and indulgent bites from 10am every Friday and Saturday.", cover: "breakfast", tags: ["menu", "news"],
+      points: [["Coffee", "Iced caramel latte is the crowd favourite."], ["Bites", "Try the smash burger with a fresh orange juice."], ["Sweet", "End with a chocolate cake slice or donuts."]] },
+  ],
+  about: [
+    "{store} is a cloud kitchen from Old Dhaka serving recipes passed down three generations — from our grandfather's kacchi to modern smash burgers.",
+    "Everything is cooked fresh in small batches in our hygiene-certified kitchen in Mohammadpur using halal ingredients.",
+    "We deliver across Dhaka in insulated bags within 45 minutes. Open daily 11am–11pm.",
+  ],
+  perks: ["Cooked fresh on order", "Delivered hot within 45 minutes"],
+  reviews: [
+    "Arrived hot and fresh, tasted amazing.", "Best kacchi I've had outside Old Dhaka.", "Portion size is generous.", "Rider was on time, food was well packed.",
+    "A bit spicy but delicious.", "Ordered for a family dinner, everyone loved it.", "Will definitely order again.",
+  ],
+};

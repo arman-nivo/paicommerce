@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@import "@pai/theme-kit/styles.css";
+
+/* Classes used by the kit, every theme and the storefront itself. */
+@source "../../../../packages/theme-kit/src";
+@source "../../../../themes/*/src";
+@source "../";
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+body {
+  margin: 0;
+}

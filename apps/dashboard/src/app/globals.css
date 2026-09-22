@@ -1,0 +1,27 @@
+@import "tailwindcss";
+@import "@pai/ui/styles.css";
+@source "../../../../packages/ui/src";
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  [contenteditable]:empty::before { content: attr(data-placeholder); color: var(--muted-fg); opacity: 0.7; pointer-events: none; }
+}
+
+/* Rich text rendered/edited in the dashboard */
+.prose-editor { line-height: 1.65; font-size: 0.875rem; }
+.prose-editor h2 { font-size: 1.25rem; font-weight: 700; margin: 0.75rem 0 0.25rem; }
+.prose-editor h3 { font-size: 1.05rem; font-weight: 600; margin: 0.75rem 0 0.25rem; }
+.prose-editor p { margin: 0.4rem 0; }
+.prose-editor ul { list-style: disc; padding-left: 1.4rem; margin: 0.4rem 0; }
+.prose-editor ol { list-style: decimal; padding-left: 1.4rem; margin: 0.4rem 0; }
+.prose-editor a { color: var(--primary); text-decoration: underline; }
+.prose-editor blockquote { border-left: 3px solid var(--border); padding-left: 0.75rem; color: var(--muted-fg); }
+.prose-editor img { max-width: 100%; border-radius: 0.5rem; }
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: #fff !important; color: #000 !important; }
+  .print-page { break-after: page; box-shadow: none !important; border: none !important; }
+  .print-page:last-child { break-after: auto; }
+  @page { margin: 12mm; }
+}

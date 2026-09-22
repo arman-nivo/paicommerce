@@ -1,0 +1,60 @@
+/* Developer docs — small additions on top of `.prose-pai` (globals.css). */
+
+.docs-prose > :first-child { margin-top: 0; }
+.docs-prose h2 { font-size: 1.55rem; font-weight: 750; color: var(--fg); padding-top: .35rem; }
+.docs-prose h3 { color: var(--fg); }
+.docs-prose h4 { color: var(--fg); }
+.docs-prose p, .docs-prose li { font-size: 0.975rem; }
+.docs-prose li > p { margin-top: .4em; }
+.docs-prose li > ul, .docs-prose li > ol { margin-top: .35em; }
+.docs-prose li > .docs-code { margin-top: .75rem; margin-bottom: .75rem; }
+
+/* Heading anchor links */
+.docs-heading { position: relative; }
+.docs-anchor {
+  position: absolute;
+  left: -1.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  width: 1.3rem;
+  height: 1.3rem;
+  border-radius: 6px;
+  color: var(--muted-fg);
+  opacity: 0;
+  transition: opacity .15s ease, color .15s ease;
+  text-decoration: none !important;
+}
+.docs-heading:hover .docs-anchor,
+.docs-anchor:focus-visible { opacity: 1; }
+.docs-anchor:hover { color: var(--primary); }
+@media (max-width: 1023px) { .docs-anchor { display: none; } }
+.docs-heading:target { animation: docs-target 1.6s ease-out 1; }
+@keyframes docs-target {
+  0% { background: color-mix(in srgb, var(--primary) 12%, transparent); }
+  100% { background: transparent; }
+}
+
+/* Callouts */
+.docs-callout-body > * + * { margin-top: .5em; }
+.docs-callout-body p, .docs-callout-body li { color: inherit; font-size: inherit; }
+.docs-callout-body :not(pre) > code { background: rgb(255 255 255 / .7); }
+.docs-callout-body .docs-code { margin: .75rem 0; }
+
+/* Code blocks */
+.docs-code pre { scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .15) transparent; }
+.docs-code pre:focus-visible { outline: 2px solid var(--ring); outline-offset: -2px; }
+
+/* Tables */
+.docs-table table { font-size: .875rem; margin: 0; }
+.docs-table th { font-size: .8rem; letter-spacing: .01em; color: var(--fg); white-space: nowrap; }
+.docs-table td code { white-space: nowrap; }
+.docs-table th, .docs-table td { border-left: 0; border-right: 0; }
+.docs-table { border: 1px solid var(--border); border-radius: 12px; }
+.docs-table tr:first-child th { border-top: 0; }
+.docs-table tr:last-child td { border-bottom: 0; }
+
+/* Task lists (checklists) */
+.docs-prose ul.docs-tasklist { list-style: none; padding-left: 0; }
+.docs-prose ul.docs-tasklist > li + li { margin-top: .6em; }

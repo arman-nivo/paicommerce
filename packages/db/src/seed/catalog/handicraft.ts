@@ -1,0 +1,53 @@
+import type { Catalog } from "./types";
+
+export const handicraft: Catalog = {
+  key: "handicraft",
+  vendor: "Artisan Craft Co.",
+  freeShippingOver: 3000,
+  qty: [[1, 75], [2, 20], [3, 5]],
+  collections: [
+    { slug: "pottery-ceramics", title: "Pottery & Ceramics", description: "Wheel-thrown stoneware from our potters in Bijoypur.", img: "potteryWheel" },
+    { slug: "home-decor", title: "Home Decor", description: "Handmade accents that bring warmth to any room.", img: "bohoLiving" },
+    { slug: "wall-art", title: "Wall Art", description: "Original paintings and prints by Bangladeshi artists.", img: "floralPainting" },
+    { slug: "leather-bags", title: "Leather & Jute", description: "Hand-stitched leather and eco-friendly jute goods.", img: "leatherCraft" },
+    { slug: "candles-soaps", title: "Candles & Soaps", description: "Small-batch soy candles and cold-process soaps.", img: "amberCandles" },
+  ],
+  products: [
+    { t: "Hand-Thrown Stoneware Vase Set", price: 3450, img: ["greyVases", "potteryWheel"], type: "Vase", col: ["pottery-ceramics", "home-decor"], feat: true, pop: 2, d: "A trio of matte stoneware bottles, each thrown by hand — no two are alike.", h: ["Handmade in Cumilla", "Food-safe glaze inside", "Set of 3 heights"], stock: [3, 12], tags: ["handmade", "pottery"] },
+    { t: "Speckled Ceramic Cup Set (4)", price: 2450, img: ["ceramicCups"], type: "Cups", col: ["pottery-ceramics"], feat: true, pop: 2, d: "Handleless cups with a speckled oat glaze, perfect for cha.", h: ["Dishwasher safe", "180 ml each"], stock: [5, 15], tags: ["tableware"] },
+    { t: "Glazed Dinner Plates (Set of 4)", price: 3950, img: ["ceramicPlates", "platesColor"], type: "Plates", col: ["pottery-ceramics"], pop: 1.3, d: "Organic-edge plates in a soft sky-blue glaze.", h: ["26 cm diameter", "Microwave safe"], stock: [3, 10], tags: ["tableware"] },
+    { t: "Handcrafted Ceramic Mug", price: 650, img: ["whiteMug", "ceramicCups"], type: "Mug", col: ["pottery-ceramics"], pop: 2.5, d: "A chunky everyday mug with a comfortable handle.", opt: [{ name: "Glaze", values: ["Milk White", "Oat", "Charcoal"] }], tags: ["mug", "gift"] },
+    { t: "Terracotta Planter with Cactus", price: 950, img: ["cactusBowl", "cactus"], type: "Planter", col: ["home-decor"], pop: 1.5, d: "Hand-shaped terracotta bowl with a mini cactus garden.", stock: [5, 20], tags: ["plants", "terracotta"] },
+    { t: "Macramé Wall Hanging", price: 2250, img: ["livingMacrame", "bohoLiving"], type: "Wall Hanging", col: ["home-decor", "wall-art"], feat: true, pop: 1.5, d: "Hand-knotted cotton rope hanging on a driftwood dowel.", h: ["60 × 90 cm", "100% cotton cord"], stock: [3, 10], tags: ["boho", "macrame"] },
+    { t: "Nakshi Kantha Bedspread", price: 6500, img: ["bedRust", "bedroomBoho"], type: "Kantha", col: ["home-decor"], feat: true, pop: 1, d: "Hand-embroidered kantha stitched by women artisans in Jamalpur over six weeks.", h: ["Double-bed size", "Layered cotton sari fabric", "Each piece is unique"], stock: [2, 6], tags: ["kantha", "heritage"] },
+    { t: "Minimal Bud Vase", price: 950, img: ["vaseMinimal", "whiteVase"], type: "Vase", col: ["pottery-ceramics", "home-decor"], pop: 1.5, d: "A small porcelain vase for a single stem.", stock: [5, 20], tags: ["vase"] },
+    { t: "Hand-Painted Floral Canvas (24 × 36\")", price: 14500, img: ["floralPainting"], type: "Painting", col: ["wall-art"], feat: true, pop: 0.6, d: "Original oil on canvas inspired by Dutch still life, by Dhaka artist Nazia Rahman.", h: ["Original, signed", "Gallery-wrapped canvas", "Certificate of authenticity"], stock: [1, 1], tags: ["original", "oil"] },
+    { t: "Abstract Acrylic on Canvas", price: 12500, img: ["abstractArt", "paintBrushes"], type: "Painting", col: ["wall-art"], pop: 0.6, d: "A vibrant palette-knife abstract — bold colour for modern walls.", stock: [1, 2], tags: ["original", "abstract"] },
+    { t: "Watercolour Abstract Print (A3)", price: 1850, img: ["watercolor"], type: "Print", col: ["wall-art"], pop: 1.2, d: "Giclée print on 300 gsm cotton paper.", opt: [{ name: "Frame", values: ["Unframed", "Oak frame"] }], delta: { "Oak frame": 1200 }, tags: ["print"] },
+    { t: "Hand-Stitched Leather Backpack", price: 7950, img: ["leatherBackpack", "leatherCraft"], type: "Backpack", col: ["leather-bags"], feat: true, pop: 1, d: "Vegetable-tanned leather backpack, saddle-stitched by hand in Hazaribagh.", h: ["Full-grain leather", "Fits a 14\" laptop"], stock: [2, 6], tags: ["leather"] },
+    { t: "Artisan Leather Crossbody", price: 4450, img: ["brownCrossbody", "leatherCraft"], type: "Bag", col: ["leather-bags"], pop: 1.2, d: "A compact crossbody with brass hardware.", stock: [3, 8], tags: ["leather"] },
+    { t: "Jute & Kraft Tote Bag", price: 450, img: ["kraftTote"], type: "Tote", col: ["leather-bags"], pop: 2.5, d: "Sturdy, reusable golden-fibre tote — say no to plastic.", stock: [20, 60], tags: ["jute", "eco"] },
+    { t: "Organic Handmade Soap Trio", price: 750, img: ["soaps"], type: "Soap", col: ["candles-soaps"], pop: 2, d: "Neem, turmeric and lavender cold-process soaps.", stock: [10, 40], tags: ["natural", "gift"] },
+    { t: "Amber Glass Soy Candles (Set of 2)", price: 1450, img: ["amberCandles", "candleCozy"], type: "Candle", col: ["candles-soaps"], pop: 1.8, d: "Hand-poured soy wax with cotton wicks — sandalwood and jasmine.", stock: [8, 25], tags: ["candle", "gift"] },
+    { t: "Hand-Dyed Wool Yarn Bundle", price: 1650, img: ["yarn"], type: "Yarn", col: ["home-decor"], pop: 0.8, d: "Six skeins of naturally dyed wool for knitting and crochet.", stock: [5, 15], tags: ["diy"] },
+    { t: "Hammered Copper Water Jug", price: 3250, img: ["metalsmith"], type: "Copperware", col: ["home-decor"], pop: 0.7, d: "Traditional copper jug hammered by hand in Dhamrai.", stock: [2, 8], tags: ["copper", "heritage"] },
+  ],
+  blog: [
+    { title: "Meet the Makers: The Potters of Bijoypur", excerpt: "A visit to the Cumilla village where clay has been shaped by hand for generations.", cover: "potteryWheel", tags: ["makers", "story"],
+      points: [["The clay", "Local river clay is sieved and aged for weeks."], ["The wheel", "Every piece is thrown by hand, then dried in the sun."], ["The fire", "Firing happens in wood kilns built by the potters themselves."]] },
+    { title: "The Story Behind Nakshi Kantha", excerpt: "How old saris become heirloom quilts — and why each stitch tells a story.", cover: "bedRust", tags: ["heritage"],
+      points: [["Layers of memory", "Worn saris are layered and stitched together."], ["Motifs", "Lotus, fish and the tree of life are common symbols."], ["Fair pay", "We pay artisans upfront, before the piece is sold."]] },
+    { title: "Caring for Handmade Ceramics", excerpt: "Keep your handmade pieces beautiful for years with a few simple habits.", cover: "ceramicCups", tags: ["care"],
+      points: [["Avoid thermal shock", "Don't pour boiling water into a cold cup."], ["Hand wash when possible", "It keeps glazes glossy longer."], ["Embrace character", "Small variations are the mark of the maker."]] },
+  ],
+  about: [
+    "{store} connects you with more than 120 artisans across Bangladesh — potters, weavers, leatherworkers and painters.",
+    "We work directly with makers, pay fair prices upfront and tell the story behind every piece.",
+    "Each item is handmade, so slight variations in colour and shape are part of its charm.",
+  ],
+  perks: ["Handmade by Bangladeshi artisans", "Fair-trade, paid upfront"],
+  reviews: [
+    "Beautiful craftsmanship, you can feel it's handmade.", "Even prettier in person.", "Packed very carefully, nothing broke.",
+    "Lovely gift for my mother.", "Supporting local artisans feels great.", "The colours are gorgeous.", "Will be ordering more.",
+  ],
+};

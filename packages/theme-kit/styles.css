@@ -1,0 +1,175 @@
+/*
+ * @pai/theme-kit — storefront design tokens & base component styles.
+ *
+ * The storefront imports this after Tailwind:
+ *   @import "tailwindcss";
+ *   @import "@pai/theme-kit/styles.css";
+ *   @source "<path>/packages/theme-kit/src";
+ *   @source "<path>/themes/*\/src";
+ *
+ * Every colour/font/radius comes from the CSS variables emitted by the theme's global settings
+ * (see `defaultCssVariables` in @pai/theme-sdk and `kitCssVariables` in the kit), so Tailwind
+ * utilities such as `bg-pai-primary`, `text-pai-fg/70`, `rounded-pai`, `font-heading`
+ * automatically follow the merchant's theme settings.
+ */
+
+@theme inline {
+  --color-pai-bg: var(--pai-bg);
+  --color-pai-fg: var(--pai-fg);
+  --color-pai-primary: var(--pai-primary);
+  --color-pai-primary-fg: var(--pai-primary-fg);
+  --color-pai-accent: var(--pai-accent);
+  --color-pai-muted: var(--pai-muted);
+  --color-pai-border: var(--pai-border);
+  --color-pai-sale: var(--pai-sale);
+  --color-pai-card: var(--pai-card, var(--pai-bg));
+  --font-heading: var(--pai-font-heading);
+  --font-body: var(--pai-font-body);
+  --radius-pai: var(--pai-radius);
+  --radius-pai-btn: var(--pai-button-radius);
+  --animate-pai-marquee: pai-marquee var(--pai-marquee-duration, 30s) linear infinite;
+  --animate-pai-fade: pai-fade 0.25s ease-out;
+  --animate-pai-slide-in: pai-slide-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pai-slide-in-left: pai-slide-in-left 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  --animate-pai-pop: pai-pop 0.2s ease-out;
+}
+
+@keyframes pai-marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes pai-fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pai-slide-in { from { transform: translateX(100%) } to { transform: translateX(0) } }
+@keyframes pai-slide-in-left { from { transform: translateX(-100%) } to { transform: translateX(0) } }
+@keyframes pai-pop { from { opacity: 0; transform: translateY(8px) scale(.98) } to { opacity: 1; transform: none } }
+
+@layer base {
+  .pai-root {
+    background: var(--pai-bg);
+    color: var(--pai-fg);
+    font-family: var(--pai-font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  .pai-root :where(h1, h2, h3, h4, h5, h6) { font-family: var(--pai-font-heading); }
+  .pai-root :where(a) { color: inherit; text-decoration: none; }
+  .pai-root :where(button) { cursor: pointer; }
+  .pai-root :where(input, select, textarea) { font: inherit; }
+}
+
+@layer components {
+  /* Layout */
+  .pai-container {
+    width: 100%;
+    max-width: var(--pai-container);
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 3vw, 2rem);
+  }
+  .pai-section { padding-block: calc(var(--pai-section-spacing) * var(--pai-section-pad, 1)); }
+  .pai-section-tight { padding-block: calc(var(--pai-section-spacing) * 0.5); }
+
+  /* Headings scale with the theme's heading_scale setting */
+  .pai-h1, .pai-h2, .pai-h3, .pai-h4 { text-transform: var(--pai-heading-transform, none); }
+  .pai-h1 { font-family: var(--pai-font-heading); font-size: calc(clamp(2.25rem, 5vw, 4rem) * var(--pai-heading-scale)); line-height: 1.05; letter-spacing: -0.02em; font-weight: 700; }
+  .pai-h2 { font-family: var(--pai-font-heading); font-size: calc(clamp(1.75rem, 3.2vw, 2.6rem) * var(--pai-heading-scale)); line-height: 1.12; letter-spacing: -0.015em; font-weight: 700; }
+  .pai-h3 { font-family: var(--pai-font-heading); font-size: calc(clamp(1.25rem, 2vw, 1.6rem) * var(--pai-heading-scale)); line-height: 1.2; font-weight: 600; }
+  .pai-h4 { font-family: var(--pai-font-heading); font-size: calc(1.125rem * var(--pai-heading-scale)); line-height: 1.3; font-weight: 600; }
+  .pai-eyebrow { font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 600; opacity: 0.75; }
+
+  /* Buttons */
+  .pai-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+    min-height: 2.875rem; padding: 0.7rem 1.5rem; border-radius: var(--pai-button-radius);
+    font-weight: 600; font-size: 0.9375rem; line-height: 1.2; white-space: nowrap;
+    border: 1px solid transparent; transition: background-color .2s, color .2s, border-color .2s, opacity .2s, transform .1s;
+  }
+  .pai-btn:active { transform: translateY(1px); }
+  .pai-btn:disabled, .pai-btn[aria-disabled="true"] { opacity: 0.55; cursor: not-allowed; }
+  .pai-btn-primary { background: var(--pai-primary); color: var(--pai-primary-fg); }
+  .pai-btn-primary:hover { background: color-mix(in srgb, var(--pai-primary) 88%, var(--pai-fg)); }
+  .pai-btn-secondary { background: transparent; color: var(--pai-fg); border-color: var(--pai-fg); }
+  .pai-btn-secondary:hover { background: var(--pai-fg); color: var(--pai-bg); }
+  .pai-btn-outline { background: transparent; color: var(--pai-fg); border-color: var(--pai-border); }
+  .pai-btn-outline:hover { border-color: var(--pai-fg); }
+  .pai-btn-accent { background: var(--pai-accent); color: #fff; }
+  .pai-btn-accent:hover { filter: brightness(0.95); }
+  .pai-btn-light { background: #fff; color: #111; }
+  .pai-btn-light:hover { background: rgba(255,255,255,.88); }
+  .pai-btn-ghost { background: transparent; color: inherit; padding-inline: 0.5rem; }
+  .pai-btn-link { background: transparent; color: inherit; padding: 0; min-height: 0; text-decoration: underline; text-underline-offset: 4px; }
+  .pai-btn-sm { min-height: 2.25rem; padding: 0.45rem 1rem; font-size: 0.8125rem; }
+  .pai-btn-lg { min-height: 3.25rem; padding: 0.85rem 2rem; font-size: 1rem; }
+  .pai-btn-block { width: 100%; }
+
+  /* Form controls */
+  .pai-input {
+    width: 100%; min-height: 2.875rem; padding: 0.625rem 0.875rem;
+    background: var(--pai-bg); color: var(--pai-fg);
+    border: 1px solid var(--pai-border); border-radius: min(var(--pai-radius), 12px);
+    outline: none; transition: border-color .15s, box-shadow .15s;
+  }
+  .pai-input:focus { border-color: var(--pai-fg); box-shadow: 0 0 0 3px rgb(var(--pai-primary-rgb) / 0.15); }
+  .pai-input[aria-invalid="true"] { border-color: var(--pai-sale); }
+  .pai-label { display: block; font-size: 0.8125rem; font-weight: 600; margin-bottom: 0.375rem; }
+  .pai-card { background: var(--pai-card, var(--pai-bg)); border: 1px solid var(--pai-border); border-radius: var(--pai-radius); }
+
+  /* Rich text from the merchant (product descriptions, pages, posts) */
+  .pai-rte { line-height: 1.75; overflow-wrap: anywhere; }
+  .pai-rte > * + * { margin-top: 1em; }
+  .pai-rte h1, .pai-rte h2, .pai-rte h3, .pai-rte h4 { font-family: var(--pai-font-heading); line-height: 1.25; font-weight: 700; margin-top: 1.5em; }
+  .pai-rte h1 { font-size: 1.875rem; } .pai-rte h2 { font-size: 1.5rem; } .pai-rte h3 { font-size: 1.25rem; }
+  .pai-rte a { text-decoration: underline; text-underline-offset: 3px; }
+  .pai-rte ul { list-style: disc; padding-left: 1.25rem; } .pai-rte ol { list-style: decimal; padding-left: 1.25rem; }
+  .pai-rte li + li { margin-top: .35em; }
+  .pai-rte img { border-radius: var(--pai-radius); max-width: 100%; height: auto; }
+  .pai-rte blockquote { border-left: 3px solid var(--pai-primary); padding-left: 1rem; font-style: italic; opacity: .9; }
+  .pai-rte table { width: 100%; border-collapse: collapse; font-size: .9em; }
+  .pai-rte th, .pai-rte td { border: 1px solid var(--pai-border); padding: .5rem .75rem; text-align: left; }
+
+  /* Section colour schemes (setting `color_scheme` on most sections) */
+  .pai-scheme-muted { --pai-bg: var(--pai-scheme-muted-bg); --pai-card: var(--pai-scheme-muted-card); background: var(--pai-bg); color: var(--pai-fg); }
+  .pai-scheme-inverse {
+    --pai-bg: var(--pai-scheme-inverse-bg); --pai-fg: var(--pai-scheme-inverse-fg);
+    --pai-bg-rgb: var(--pai-scheme-inverse-bg-rgb); --pai-fg-rgb: var(--pai-scheme-inverse-fg-rgb);
+    --pai-muted: var(--pai-scheme-inverse-muted); --pai-border: var(--pai-scheme-inverse-border); --pai-card: var(--pai-scheme-inverse-muted);
+    --pai-primary: var(--pai-scheme-inverse-fg); --pai-primary-fg: var(--pai-scheme-inverse-bg);
+    background: var(--pai-bg); color: var(--pai-fg);
+  }
+  .pai-scheme-primary {
+    --pai-bg: var(--pai-scheme-primary-bg); --pai-fg: var(--pai-scheme-primary-fg);
+    --pai-bg-rgb: var(--pai-scheme-primary-bg-rgb); --pai-fg-rgb: var(--pai-scheme-primary-fg-rgb);
+    --pai-muted: var(--pai-scheme-primary-muted); --pai-border: var(--pai-scheme-primary-border); --pai-card: var(--pai-scheme-primary-muted);
+    --pai-primary: var(--pai-scheme-primary-fg); --pai-primary-fg: var(--pai-scheme-primary-bg);
+    background: var(--pai-bg); color: var(--pai-fg);
+  }
+  .pai-scheme-accent {
+    --pai-bg: var(--pai-scheme-accent-bg); --pai-fg: #ffffff; --pai-fg-rgb: 255 255 255;
+    --pai-muted: rgba(255,255,255,.12); --pai-border: rgba(255,255,255,.25); --pai-card: rgba(255,255,255,.1);
+    --pai-primary: #ffffff; --pai-primary-fg: var(--pai-scheme-accent-bg);
+    background: var(--pai-bg); color: var(--pai-fg);
+  }
+
+  /* Utilities */
+  .pai-no-scrollbar { scrollbar-width: none; }
+  .pai-no-scrollbar::-webkit-scrollbar { display: none; }
+  .pai-snap-x { scroll-snap-type: x mandatory; overscroll-behavior-x: contain; }
+  .pai-snap-start { scroll-snap-align: start; }
+  .pai-line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .pai-line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .pai-img-cover { width: 100%; height: 100%; object-fit: cover; }
+  .pai-skeleton { background: linear-gradient(90deg, var(--pai-muted) 25%, color-mix(in srgb, var(--pai-muted) 60%, var(--pai-bg)) 50%, var(--pai-muted) 75%); background-size: 200% 100%; animation: pai-shimmer 1.4s infinite; }
+  @keyframes pai-shimmer { from { background-position: 200% 0 } to { background-position: -200% 0 } }
+
+  /* Carousel (see <Carousel>) */
+  .pai-carousel-track { gap: var(--gap, 16px); --pv: var(--pv-base, 1.6); }
+  @media (min-width: 768px) { .pai-carousel-track { --pv: var(--pv-md, 3); } }
+  @media (min-width: 1024px) { .pai-carousel-track { --pv: var(--pv-lg, 4); } }
+  .pai-carousel-item { width: calc((100% - (var(--pv) - 1) * var(--gap, 16px)) / var(--pv)); }
+
+  /* Product card hover image swap */
+  .pai-card-media .pai-card-img-2 { opacity: 0; transition: opacity .45s ease; }
+  .pai-card:hover .pai-card-media .pai-card-img-2, .pai-product-card:hover .pai-card-media .pai-card-img-2 { opacity: 1; }
+  .pai-product-card .pai-card-media img:first-child { transition: transform .8s cubic-bezier(.2,.8,.2,1); }
+  .pai-product-card[data-zoom="true"]:hover .pai-card-media img:first-child { transform: scale(1.04); }
+
+  /* Customizer preview highlight */
+  [data-pai-section].pai-preview-hover > * { outline: 2px dashed rgb(59 99 246 / .7); outline-offset: -2px; }
+  [data-pai-section].pai-preview-selected > * { outline: 2px solid rgb(59 99 246); outline-offset: -2px; }
+}

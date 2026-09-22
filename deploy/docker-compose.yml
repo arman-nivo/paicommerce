@@ -1,0 +1,36 @@
+# Production-like stack: Postgres + the four apps behind any reverse proxy (Caddy/Nginx/Traefik).
+# Point *.yourdomain.com and custom domains at the storefront service.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment: { POSTGRES_DB: paicommerce, POSTGRES_USER: pai, POSTGRES_PASSWORD: pai }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    ports: ["5432:5432"]
+  redis:
+    image: redis:7-alpine
+  web:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { APP: web } }
+    env_file: ../.env
+    environment: { DATABASE_URL: postgres://pai:pai@postgres:5432/paicommerce }
+    ports: ["3000:3000"]
+    depends_on: [postgres]
+  dashboard:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { APP: dashboard } }
+    env_file: ../.env
+    environment: { DATABASE_URL: postgres://pai:pai@postgres:5432/paicommerce }
+    ports: ["3001:3000"]
+    depends_on: [postgres]
+  admin:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { APP: admin } }
+    env_file: ../.env
+    environment: { DATABASE_URL: postgres://pai:pai@postgres:5432/paicommerce }
+    ports: ["3002:3000"]
+    depends_on: [postgres]
+  storefront:
+    build: { context: .., dockerfile: deploy/Dockerfile, args: { APP: storefront } }
+    env_file: ../.env
+    environment: { DATABASE_URL: postgres://pai:pai@postgres:5432/paicommerce }
+    ports: ["3003:3000"]
+    depends_on: [postgres]
+volumes:
+  pgdata:
