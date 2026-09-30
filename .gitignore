@@ -8,3 +8,5 @@ dist
 apps/*/public/uploads
 .DS_Store
 next-env.d.ts
+.vercel
+.env*
