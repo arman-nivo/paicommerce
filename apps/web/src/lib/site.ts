@@ -1,4 +1,4 @@
-import { DASHBOARD_URL, STOREFRONT_ROOT_DOMAIN, WEB_URL } from "@pai/core";
+import { DASHBOARD_URL, storeUrl, WEB_URL } from "@pai/core";
 
 export const SITE = {
   name: "PaiCommerce",
@@ -33,12 +33,13 @@ export function signupUrl(params?: Record<string, string | undefined>): string {
 export const loginUrl = `${dash}/login`;
 export const dashboardUrl = dash;
 
-/** Live demo store for a theme: `{demoSlug}.{STOREFRONT_ROOT_DOMAIN}` (dev: http://aurora-demo.localhost:3003). */
+/**
+ * Live demo store for a theme: `{demoSlug}.{STOREFRONT_ROOT_DOMAIN}` (dev: http://aurora-demo.localhost:3003),
+ * or `{STOREFRONT_URL}/s/{demoSlug}` where wildcard subdomains aren't available (e.g. *.vercel.app).
+ */
 export function demoStoreUrl(themeSlug: string, demoStoreSlug?: string | null): string {
   const slug = demoStoreSlug || `${themeSlug}-demo`;
-  const root = STOREFRONT_ROOT_DOMAIN;
-  const proto = /^(localhost|127\.0\.0\.1)/.test(root) || root.includes(".localhost") ? "http" : "https";
-  return `${proto}://${slug}.${root}`;
+  return storeUrl({ slug });
 }
 
 export function absoluteUrl(path = "/"): string {
